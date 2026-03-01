@@ -5,4 +5,4 @@
     pip3 install playwright rich
 
 -Instalacion del venv 
-    python3 
+    python3 venv venv

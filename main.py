@@ -1,9 +1,8 @@
 ##### Importamos #####
 
-# Importar playwright 
-from playwright.async_api import async_playwright
-# Importamos asyncio para realizar de asincrona 
-import asyncio
+# Importar la API sincrona de Playwright 
+from playwright.sync_api import sync_playwright
+
 
 
 # CONSTANTES que vamos a usar para nuestro web scrapping
@@ -14,15 +13,13 @@ URL_SCRAP = "https://www.unido.org/publications" # Esta Url cambbiara dependiend
 
 
 
-# Definimos la funcion principal
-async def main():
+# Definimos la funcion especial de Playwright (sync_playwright) que hace:
+#    ✅ inicia el motor de automatización
+#    ✅ conecta Python con el navegador
+#    ✅ prepara Chromium / Firefox / WebKit
 
+# Declaramos el Context Manager (with)
+with sync_playwright() as p:
 
-    return None
-
-
-
-
-# Ejecutamos la funcion main()
-if __name__ == "_main_":
-    asyncio.run(main())
+    #  Llamando a (p)  que es el controlador principal de Playwright el cual contiene los navegadores y lo lanzamos
+    browser = p.chronium.launch(headless=False) # True  = navegador invisible/ False = visible
