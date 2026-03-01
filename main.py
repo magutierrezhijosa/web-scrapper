@@ -28,7 +28,7 @@ URL_SCRAP = "https://www.unido.org/publications" # Esta Url cambbiara dependiend
 with sync_playwright() as p:
 
     #  Llamando a (p)  que es el controlador principal de Playwright el cual contiene los navegadores y lo lanzamos
-    browser = p.chronium.launch(headless=False) # True  = navegador invisible/ False = visible
+    browser = p.chromium.launch(headless=False) # True  = navegador invisible/ False = visible
 
     # Creamos una nueva pestaña
     page  = browser.new_page()
