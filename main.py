@@ -9,7 +9,13 @@ from playwright.sync_api import sync_playwright
 URL_SCRAP = "https://www.unido.org/publications" # Esta Url cambbiara dependiendo de la pagina a scrappear
 
 
-# Definimos la funncion que va a realizar el scrapping
+########## Pasos que va a realizar nuesto scrape #####
+# 1. Inicia Playwright
+# 2. Abre un navegador Chromium automático
+# 3. Abre una pestaña
+# 4. Va a una web
+# 5. Espera 5 segundos
+# 6. Cierra el navegador
 
 
 
@@ -23,3 +29,15 @@ with sync_playwright() as p:
 
     #  Llamando a (p)  que es el controlador principal de Playwright el cual contiene los navegadores y lo lanzamos
     browser = p.chronium.launch(headless=False) # True  = navegador invisible/ False = visible
+
+    # Creamos una nueva pestaña
+    page  = browser.new_page()
+
+    # Vamos a la web que queremos hacer el scrapping
+    page.goto(URL_SCRAP)
+
+    # Esperamos a que cargue la pagina por que puede no encontrar  los datos por que no se cargo todo el JS
+    page.wait_for_timeout(5000)
+
+    # Cerramos el navegador
+    browser.close()
