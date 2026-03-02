@@ -36,8 +36,16 @@ with sync_playwright() as p:
     # Vamos a la web que queremos hacer el scrapping
     page.goto(URL_SCRAP)
 
-    # Esperamos a que cargue la pagina por que puede no encontrar  los datos por que no se cargo todo el JS
-    page.wait_for_timeout(5000)
+    # Le decimos que espere a que terrmine de cargar todo
+    page.wait_for_load_state("networkidle")
 
+    # Recogemos todos los items qque vamos a scrapear
+    items = page.locator("div.views-row")
+
+    # Elentos que deseamos recoger de la pagina 
+    # 1.TITULO
+    # 2.FECHA
+    # 3.PDF
+    
     # Cerramos el navegador
     browser.close()
