@@ -39,13 +39,25 @@ with sync_playwright() as p:
     # Le decimos que espere a que terrmine de cargar todo
     page.wait_for_load_state("networkidle")
 
-    # Recogemos todos los items qque vamos a scrapear
+    # Recogemos todos los items que vamos a scrapear
+    # Mucho mejor usar locator() que query()
     items = page.locator("div.views-row")
+
+    #Compruebo si me seleeciona todas las publicaciones 
+    print("Publicaiones encontradas", items.count())
 
     # Elentos que deseamos recoger de la pagina 
     # 1.TITULO
     # 2.FECHA
     # 3.PDF
     
+    # Creamos un bucle para iterar las diferentes publicaciones
+    for i in range(items.count()):
+
+        # Llamamos a la funcion nth() para seleccionar un lemento concreto dentro de uun conjunto que comparten un locator()
+        item = items.nth(i)
+
+
+
     # Cerramos el navegador
     browser.close()
