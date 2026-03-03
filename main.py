@@ -65,10 +65,11 @@ with sync_playwright() as p:
         ########### Mostramos los titulos #############
         print("Titulo de la publicacion : " , title)
 
-        # Vamos a bbuscar a partir del DOM el siguiente elemento despues del titulo que siempre es la fecha como ancla para recoger los datos
-        metadata = item.get_by_role("link").locator("xpath=following-sibling::p[1]").first
+        # Vamos a buscar dentro del elemento item el primer <p> que encuentre
+        metadata = item.locator("p").first
 
-        if metadata.is_visible():
+        # Comprobamos que haya elementos 
+        if metadata.count() > 0:
             # Recogemos la data del elemento seleccionado anteriormente
             date_text = metadata.inner_text()
 
