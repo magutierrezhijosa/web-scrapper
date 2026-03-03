@@ -66,12 +66,12 @@ with sync_playwright() as p:
         print("Titulo de la publicacion : " , title)
 
         # Vamos a buscar dentro del elemento item el primer <p> que encuentre
-        metadata = item.locator("p").first
+        metadata = item.locator("p.text-body.mt-1")
 
         # Comprobamos que haya elementos 
         if metadata.count() > 0:
             # Recogemos la data del elemento seleccionado anteriormente
-            date_text = metadata.inner_text()
+            date_text = metadata.first.text_content()
 
             # Ahora vamos a recoger solamente el valor del año utilizando Expresiones Regulares
             match = re.search(r"\b20\d{2}\b",date_text)
