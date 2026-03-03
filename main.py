@@ -40,13 +40,13 @@ with sync_playwright() as p:
     page.wait_for_load_state("networkidle")
 
     # Recogemos todos los items que vamos a scrapear
-    # Mucho mejor usar locator() que query()
+    # Mucho mejor usar locator() que query() REECOMENDACION Playwright
     items = page.locator("div.views-row")
 
-    #Compruebo si me seleeciona todas las publicaciones 
+    #Compruebo si me seleciona todas las publicaciones 
     print("Publicaiones encontradas", items.count())
 
-    # Elentos que deseamos recoger de la pagina 
+    # Los datos que deseamos recoger de la pagina 
     # 1.TITULO
     # 2.FECHA
     # 3.PDF
@@ -54,8 +54,15 @@ with sync_playwright() as p:
     # Creamos un bucle para iterar las diferentes publicaciones
     for i in range(items.count()):
 
-        # Llamamos a la funcion nth() para seleccionar un lemento concreto dentro de uun conjunto que comparten un locator()
+        # Llamamos a la funcion nth() para seleccionar un elemento concreto dentro de un conjunto que comparten un locator()
         item = items.nth(i)
+
+        # Declaramos la variable que va a recoger el titulo
+        # Utilizamos get_by_role() por que es el selector mas estable y robusto no depende del HTML y resiste cambios CSS
+        title = item.get_by_role("link").first.inner_text()
+
+        ########### Mostramos los titulos #############
+        print("Titulo de la publicacion : " , title)
 
 
 
