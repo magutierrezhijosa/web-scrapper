@@ -70,20 +70,18 @@ with sync_playwright() as p:
         metadata = item.locator("p.text-body.mt-1")
 
         # Comprobamos que haya elementos 
-        if metadata.count() > 0:
-            # Recogemos la data del elemento seleccionado anteriormente
-            date_text = metadata.first.text_content()
+       
+        # Recogemos la data del elemento seleccionado anteriormente
+        date_text = metadata.first.text_content()
 
-            # Ahora vamos a recoger solamente el valor del año utilizando Expresiones Regulares
-            match = re.search(r"\b20\d{2}\b",date_text)
+        # Ahora vamos a recoger solamente el valor del año utilizando Expresiones Regulares
+        match = re.search(r"\b20\d{2}\b",date_text)
 
-            # Transformamos el texto para guardarlo en la variable final en el caso de que lo haya encontrado 
-            year = match.group() if match else None
+        # Transformamos el texto para guardarlo en la variable final en el caso de que lo haya encontrado 
+        year = match.group() if match else None
 
-        else:
-
-            year = None
-            
+       
+        ########### Mostramos los FECHA #############    
         print("Esta es la fecha del documento : " , year)
 
         # Marcamos el elemento que vamos a sacar la informacion 
@@ -96,6 +94,7 @@ with sync_playwright() as p:
         # Unimos la Url base mas el href reelativo 
         pdf_link = urljoin(URL_BASE,href) if href else None
             
+        ########### Mostramos el LINK #############    
         print("Esto es el link del PDF : " , pdf_link)
 
     # Cerramos el navegador
