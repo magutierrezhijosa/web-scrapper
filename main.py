@@ -2,7 +2,8 @@
 
 # Importar la API sincrona de Playwright 
 from playwright.sync_api import sync_playwright
-
+# Importamos la libreria de Expresiones Regulares
+import re
 
 
 # CONSTANTES que vamos a usar para nuestro web scrapping
@@ -65,12 +66,23 @@ with sync_playwright() as p:
         print("Titulo de la publicacion : " , title)
 
         # Vamos a bbuscar a partir del DOM el siguiente elemento despues del titulo que siempre es la fecha como ancla para recoger los datos
-        metadata = item.get_by_role("link").locator("xpath=following::*[self::div or self::span][1]")
+        metadata = item.get_by_role("link").locator("xpath=following-sibling::p[1]").first
 
-        # Recogemos la data del elemento seleccionado anteriormente
-        date = metadata.inner_text()
+        if metadata.is_visible():
+            # Recogemos la data del elemento seleccionado anteriormente
+            date_text = metadata.inner_text()
 
-        print("Esta es la fecha del documento : " , date)
+            # Ahora vamos a recoger solamente el valor del año utilizando Expresiones Regulares
+            match = re.search(r"\b20\d{2}\b",date_text)
+
+            # Transformamos el texto para guardarlo en la variable final en el caso de que lo haya encontrado 
+            year = match.group() if match else None
+
+        else:
+
+            year = None
+            
+        print("Esta es la fecha del documento : " , year)
 
 
     # Cerramos el navegador
