@@ -4,10 +4,11 @@
 from playwright.sync_api import sync_playwright
 # Importamos la libreria de Expresiones Regulares
 import re
-
+# Importamos la libreria urljoin de Python para unir la URL_Base mas la URL relativa  que nos va a dar cuando recogamos el valor del "href"
+from urllib.parse import urljoin
 
 # CONSTANTES que vamos a usar para nuestro web scrapping
-URL_SCRAP = "https://www.unido.org/publications" # Esta Url cambbiara dependiendo de la pagina a scrappear
+URL_BASE = "https://www.unido.org/publications" # Esta Url cambbiara dependiendo de la pagina a scrappear
 
 
 ########## Pasos que va a realizar nuesto scraper #####
@@ -35,7 +36,7 @@ with sync_playwright() as p:
     page  = browser.new_page()
 
     # Vamos a la web que queremos hacer el scrapping
-    page.goto(URL_SCRAP)
+    page.goto(URL_BASE)
 
     # Le decimos que espere a que terrmine de cargar todo
     page.wait_for_load_state("networkidle")
@@ -85,6 +86,17 @@ with sync_playwright() as p:
             
         print("Esta es la fecha del documento : " , year)
 
+        # Marcamos el elemento que vamos a sacar la informacion 
+        meta_link = item.locator("a.unido-link.link")
+       
+            
+        # Recogemos el texto del link utilizando la referencia al "href" y lo guardamos
+        href = meta_link.first.get_attribute("href")
+
+        # Unimos la Url base mas el href reelativo 
+        pdf_link = urljoin(URL_BASE,href) if href else None
+            
+        print("Esto es el link del PDF : " , pdf_link)
 
     # Cerramos el navegador
     browser.close()
