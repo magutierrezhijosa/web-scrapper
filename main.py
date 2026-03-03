@@ -2,8 +2,6 @@
 
 # Importar la API sincrona de Playwright 
 from playwright.sync_api import sync_playwright
-# Importamos la libreria para usar Expresiones Regulares
-import re
 
 
 
@@ -66,14 +64,11 @@ with sync_playwright() as p:
         ########### Mostramos los titulos #############
         print("Titulo de la publicacion : " , title)
 
-        # Recogemos todo el texto que se encuentra dentro del item
-        text = item.inner_text()
+        # Vamos a bbuscar a partir del DOM el siguiente elemento despues del titulo que siempre es la fecha como ancla para recoger los datos
+        metadata = item.get_by_role("link").locator("xpath=following::*[self::div or self::span][1]")
 
-        # Creamos el Regex para recoger unicamente el valor de la fecha 
-        match = re.search(r"\b20\d{2}\b", text)
-
-        # Guardamos el valor de la fecha en la variable si la encontramos sino devolvemos None para que no de fallo
-        date = match.group() if match else None
+        # Recogemos la data del elemento seleccionado anteriormente
+        date = metadata.inner_text()
 
         print("Esta es la fecha del documento : " , date)
 
