@@ -2,6 +2,8 @@
 
 # Importar la API sincrona de Playwright 
 from playwright.sync_api import sync_playwright
+# Importamos la libreria para usar Expresiones Regulares
+import re
 
 
 
@@ -9,7 +11,7 @@ from playwright.sync_api import sync_playwright
 URL_SCRAP = "https://www.unido.org/publications" # Esta Url cambbiara dependiendo de la pagina a scrappear
 
 
-########## Pasos que va a realizar nuesto scrape #####
+########## Pasos que va a realizar nuesto scraper #####
 # 1. Inicia Playwright
 # 2. Abre un navegador Chromium automático
 # 3. Abre una pestaña
@@ -57,13 +59,23 @@ with sync_playwright() as p:
         # Llamamos a la funcion nth() para seleccionar un elemento concreto dentro de un conjunto que comparten un locator()
         item = items.nth(i)
 
-        # Declaramos la variable que va a recoger el titulo
+        # Declaramos la variable que va a recoger el TITULO
         # Utilizamos get_by_role() por que es el selector mas estable y robusto no depende del HTML y resiste cambios CSS
         title = item.get_by_role("link").first.inner_text()
 
         ########### Mostramos los titulos #############
         print("Titulo de la publicacion : " , title)
 
+        # Recogemos todo el texto que se encuentra dentro del item
+        text = item.inner_text()
+
+        # Creamos el Regex para recoger unicamente el valor de la fecha 
+        match = re.search(r"\b20\d{2}\b", text)
+
+        # Guardamos el valor de la fecha en la variable si la encontramos sino devolvemos None para que no de fallo
+        date = match.group() if match else None
+
+        print("Esta es la fecha del documento : " , date)
 
 
     # Cerramos el navegador
