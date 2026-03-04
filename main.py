@@ -6,9 +6,17 @@ from playwright.sync_api import sync_playwright
 import re
 # Importamos la libreria urljoin de Python para unir la URL_Base mas la URL relativa  que nos va a dar cuando recogamos el valor del "href"
 from urllib.parse import urljoin
+# Importamos la libreria de CSV
+import csv
+
 
 # CONSTANTES que vamos a usar para nuestro web scrapping
 URL_BASE = "https://www.unido.org/publications" # Esta Url cambbiara dependiendo de la pagina a scrappear
+
+# *********************************
+#         GUARDAR EN UN CSV
+# *********************************
+def guardar_csv(datos, nombre_archivo="publicaciones_unido.csv"):
 
 
 ########## Pasos que va a realizar nuesto scraper #####
@@ -59,8 +67,6 @@ with sync_playwright() as p:
 
             # Mostramos un titulo y el  numero de la pagina que estamos scrapeando
             print(f"\n============ SCRAPEANDO PAGINA {page_number} =================")
-
-            
 
             # Recogemos todos los items que vamos a scrapear
             # Mucho mejor usar locator() que query() REECOMENDACION Playwright
