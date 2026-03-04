@@ -16,8 +16,26 @@ URL_BASE = "https://www.unido.org/publications" # Esta Url cambbiara dependiendo
 # *********************************
 #         GUARDAR EN UN CSV
 # *********************************
+
+# Definimos la funcion 
 def guardar_csv(datos, nombre_archivo="publicaciones_unido.csv"):
 
+    # Definimos el Context Manager abriendo el archivo 
+    with open(nombre_archivo,mode="w" , newline="",encoding="utf-8-sig") as archivo:
+
+        # Definimos el orden de las columnas
+        campos = ["title", "year" , "link"]
+
+        # Creamos el escritor de CSV
+        writer = csv.DictWriter(archivo,fieldnames=campos)
+
+        # Mandamos al escritor que rellene las cabeceras
+        writer.writeheader()
+
+        # Mandamos al escritor que rellene las filas
+        writer.writerows(datos)
+
+    print(f"\n✅ Datos guardados en {nombre_archivo}")
 
 ########## Pasos que va a realizar nuesto scraper #####
 # 1. Inicia Playwright
@@ -160,9 +178,13 @@ with sync_playwright() as p:
         return results  
 
     if __name__ == "__main__":
+
+        # Llamamos a la funcion para ejecutar el scrapping
         results = scrapear_publicaciones(page)
-        print(results)
-    
+
+        print(f"\nTotal registros: {len(results)}")
+
+        guardar_csv(results)
     
     
     # CERRAMOS LA NAVEGACION 
