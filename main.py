@@ -59,8 +59,10 @@ with sync_playwright() as p:
         #Compruebo si me seleciona todas las publicaciones 
         print("Publicaiones encontradas", items.count())
 
+        total_items = items.count()
+
         # Creamos un bucle para iterar las diferentes publicaciones
-        for i in range(items.count()):
+        for i in range(total_items):
 
             # Llamamos a la funcion nth() para seleccionar un elemento concreto dentro de un conjunto que comparten un locator()
             item = items.nth(i)
@@ -109,7 +111,7 @@ with sync_playwright() as p:
             })
 
              # Cerramos el navegador
-        browser.close()
+       
     
         return results
 
@@ -117,3 +119,7 @@ with sync_playwright() as p:
         results = scrapear_publicaciones(page)
     print(results)
     
+    
+    
+    # CERRAMOS LA NAVEGACION 
+    browser.close()
