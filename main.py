@@ -37,43 +37,10 @@ def guardar_csv(datos, nombre_archivo="publicaciones_unido.csv"):
 
     print(f"\n✅ Datos guardados en {nombre_archivo}")
 
-########## Pasos que va a realizar nuesto scraper #####
-# 1. Inicia Playwright
-# 2. Abre un navegador Chromium automático
-# 3. Abre una pestaña
-# 4. Va a una web
-# 5. Espera 5 segundos
-# 6. Cierra el navegador
-
-
-
-# Definimos la funcion especial de Playwright (sync_playwright) que hace:
-#    ✅ inicia el motor de automatización
-#    ✅ conecta Python con el navegador
-#    ✅ prepara Chromium / Firefox / WebKit
-
-# Declaramos el Context Manager (with)
-with sync_playwright() as p:
-
-    #  Llamando a (p)  que es el controlador principal de Playwright el cual contiene los navegadores y lo lanzamos
-    browser = p.chromium.launch(headless=False) # True  = navegador invisible/ False = visible
-
-    # Creamos una nueva pestaña
-    page  = browser.new_page()
-
-    # Vamos a la web que queremos hacer el scrapping
-    page.goto(URL_BASE)
-
-    # Le decimos que espere a que terrmine de cargar todo
-    page.locator("div.views-row").first.wait_for(state="visible")
-
-    # Los datos que deseamos recoger de la pagina 
-    # 1.TITULO
-    # 2.FECHA
-    # 3.PDF
-
-    # Creamos la funcion para realizar el scrapp
-    def scrapear_publicaciones(page):   
+# *********************************
+#         Funcion de Scrapeo
+# *********************************
+def scrapear_publicaciones(page):   
 
         # Defino una varaible diccionario para guardar los daatos y posteriormente enviarlos a un CSV
         results = []
@@ -103,7 +70,7 @@ with sync_playwright() as p:
 
                 # Declaramos la variable que va a recoger el TITULO
                 # Utilizamos get_by_role() por que es el selector mas estable y robusto no depende del HTML y resiste cambios CSS
-                title = item.get_by_role("link").first.inner_text()
+                title = item.get_by_role("link").first.inner_text().strip()
 
                 ########### Mostramos los titulos #############
                 print("Titulo de la publicacion : " , title)
@@ -168,7 +135,7 @@ with sync_playwright() as p:
                     next_button.first.click()
 
                 # Esperamos a la navegacion real 
-                page.locator("div.views-row").first.wait_for()
+                page.locator("div.views-row").first.wait_for(state="visible")
 
                 # Aumentamos en 1 el valor de la varaible que cuenta las pagina
                 page_number += 1
@@ -183,8 +150,36 @@ with sync_playwright() as p:
                 break
 
         return results  
+########## Pasos que va a realizar nuesto scraper #####
+# 1. Inicia Playwright
+# 2. Abre un navegador Chromium automático
+# 3. Abre una pestaña
+# 4. Va a una web
+# 5. Espera 5 segundos
+# 6. Cierra el navegador
 
-    if __name__ == "__main__":
+
+
+# Definimos la funcion especial de Playwright (sync_playwright) que hace:
+#    ✅ inicia el motor de automatización
+#    ✅ conecta Python con el navegador
+#    ✅ prepara Chromium / Firefox / WebKit
+
+def main():
+    # Declaramos el Context Manager (with)
+    with sync_playwright() as p:
+
+        #  Llamando a (p)  que es el controlador principal de Playwright el cual contiene los navegadores y lo lanzamos
+        browser = p.chromium.launch(headless=False) # True  = navegador invisible/ False = visible
+
+        # Creamos una nueva pestaña
+        page  = browser.new_page()
+
+        # Vamos a la web que queremos hacer el scrapping
+        page.goto(URL_BASE)
+
+        # Le decimos que espere a que terrmine de cargar todo
+        page.locator("div.views-row").first.wait_for(state="visible")
 
         # Llamamos a la funcion para ejecutar el scrapping
         results = scrapear_publicaciones(page)
@@ -192,7 +187,10 @@ with sync_playwright() as p:
         print(f"\nTotal registros: {len(results)}")
 
         guardar_csv(results)
-    
-    
-    # CERRAMOS LA NAVEGACION 
-    browser.close()
+        
+        # CERRAMOS LA NAVEGACION 
+        browser.close()
+
+if __name__ == "__main__":
+
+    main()
