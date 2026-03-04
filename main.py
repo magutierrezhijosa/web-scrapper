@@ -127,9 +127,13 @@ with sync_playwright() as p:
                 # Marcamos el elemento que vamos a sacar la informacion 
                 meta_link = item.locator("a.unido-link.link")
             
-                    
-                # Recogemos el texto del link utilizando la referencia al "href" y lo guardamos
-                href = meta_link.first.get_attribute("href")
+                ########### Controlamos errores por si no hay pdf #########
+                href = None
+
+                # Aseguramos de que haya link antes de extraer la informacion
+                if meta_link.count() > 0:
+                    # Recogemos el texto del link utilizando la referencia al "href" y lo guardamos
+                    href = meta_link.first.get_attribute("href")
 
                 # Unimos la Url base mas el href reelativo 
                 pdf_link = urljoin(URL_BASE,href) if href else None
