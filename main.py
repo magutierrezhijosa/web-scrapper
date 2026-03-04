@@ -38,7 +38,8 @@ with sync_playwright() as p:
     # Vamos a la web que queremos hacer el scrapping
     page.goto(URL_BASE)
 
-    
+    # Le decimos que espere a que terrmine de cargar todo
+    page.locator("div.views-row").first.wait_for(state="visible")
 
     # Los datos que deseamos recoger de la pagina 
     # 1.TITULO
@@ -59,17 +60,16 @@ with sync_playwright() as p:
             # Mostramos un titulo y el  numero de la pagina que estamos scrapeando
             print(f"\n============ SCRAPEANDO PAGINA {page_number} =================")
 
-            # Le decimos que espere a que terrmine de cargar todo
-            page.wait_for_load_state("networkidle")
+            
 
             # Recogemos todos los items que vamos a scrapear
             # Mucho mejor usar locator() que query() REECOMENDACION Playwright
             items = page.locator("div.views-row")
 
-            ############## Mostramos todas las publicaciones #############
-            print("Publicaiones encontradas", items.count())
-
             total_items = items.count()
+
+            ############## Mostramos todas las publicaciones #############
+            print("Publicaiones encontradas",total_items)   
 
             # Creamos un bucle para iterar las diferentes publicaciones
             for i in range(total_items):
@@ -137,7 +137,7 @@ with sync_playwright() as p:
                 next_button.first.click()
 
                 # Esperamos a la navegacion real 
-                page.wait_for_load_state("networkidle")
+                page.locator("div.views-row").first.wait_for(state="visible")
 
                 # Aumentamos en 1 el valor de la varaible que cuenta las pagina
                 page_number += 1
