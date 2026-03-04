@@ -161,11 +161,14 @@ with sync_playwright() as p:
                 # Mostramos un mensaje para informar que cambiamos de pagina
                 print("➡️ Pasando a la siguiente página...")
 
-                # Procedemos a hacer click en NEXT para pasar de pagina
-                next_button.first.click()
+                # Vamos a sincronizar el cambio real con el documento
+                with page.expect_navigation():
+
+                    # Procedemos a hacer click en NEXT para pasar de pagina
+                    next_button.first.click()
 
                 # Esperamos a la navegacion real 
-                page.locator("div.views-row").first.wait_for(state="visible")
+                page.locator("div.views-row").first.wait_for()
 
                 # Aumentamos en 1 el valor de la varaible que cuenta las pagina
                 page_number += 1
